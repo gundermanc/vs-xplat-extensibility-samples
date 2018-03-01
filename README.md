@@ -6,6 +6,12 @@ Unified extensibility samples that work on Visual Studio for Windows and Visual 
 Displays a quick info entry on hover indicating the current time and whether the line
 is at an even or odd numbered offset.
 
+This project demonstrates code reuse when dual targeting VS for Windows and VS for Mac.
+
+- AsyncQuickInfoDemo: Common binaries built and run on both VS for Windows and VS for Mac.
+- AsyncQuickInfoDemo.VSWindows: VS VSIX project that packages AsyncQuickInfoDemo for VS for Windows.
+- AsyncQuickInfoDemo.VSMac: VS VSIX project that packages AsyncQuickInfoDemo for VS for Mac.
+
 **Visual Studio for Windows:**
 
 ![](Images/QuickInfo.Windows.png)
