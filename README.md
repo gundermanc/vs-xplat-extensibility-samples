@@ -7,6 +7,7 @@ Displays a quick info entry on hover indicating the current time and whether the
 is at an even or odd numbered offset.
 
 **Visual Studio for Windows:**
+
 ![](Images/QuickInfo.Windows.png)
 
 - Requires Visual Studio 2017 15.6 Preview 4 or later
@@ -17,6 +18,7 @@ is at an even or odd numbered offset.
 - Launch VS
 
 **Visual Studio for Mac:**
+
 ![](Images/QuickInfo.Mac.png)
 
 - Requires Visual Studio for Mac 15.6
