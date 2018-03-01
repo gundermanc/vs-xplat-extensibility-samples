@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27425.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncQuickInfoDemo", "AsyncQuickInfoDemo\AsyncQuickInfoDemo.csproj", "{A8C6A9ED-4C62-420E-B7AC-1A6936A8A523}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncQuickInfoDemo.VSWindows", "AsyncQuickInfoDemo.VSWindows\AsyncQuickInfoDemo.VSWindows.csproj", "{102F4DF7-E5FA-41C8-B7B8-52E04AE97CF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A8C6A9ED-4C62-420E-B7AC-1A6936A8A523}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8C6A9ED-4C62-420E-B7AC-1A6936A8A523}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8C6A9ED-4C62-420E-B7AC-1A6936A8A523}.Release|Any CPU.Build.0 = Release|Any CPU
+		{102F4DF7-E5FA-41C8-B7B8-52E04AE97CF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{102F4DF7-E5FA-41C8-B7B8-52E04AE97CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{102F4DF7-E5FA-41C8-B7B8-52E04AE97CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{102F4DF7-E5FA-41C8-B7B8-52E04AE97CF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
