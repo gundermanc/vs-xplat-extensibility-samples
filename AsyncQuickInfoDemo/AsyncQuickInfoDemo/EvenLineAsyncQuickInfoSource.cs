@@ -66,7 +66,10 @@
                 var contentContainer = new ContainerElement(
                     ContainerElementStyle.Stacked,
                     content,
-                    "The current date and time is: " + DateTime.Now.ToString());
+                    new ClassifiedTextElement(
+                        new ClassifiedTextRun(
+                            PredefinedClassificationTypeNames.Identifier,
+                            "The current date and time is: " + DateTime.Now.ToString())));
 
                 return Task.FromResult(
                     new QuickInfoItem(
