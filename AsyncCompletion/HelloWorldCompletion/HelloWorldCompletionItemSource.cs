@@ -3,9 +3,12 @@ using System.Collections.Immutable;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Core.Imaging;
 using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion;
 using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
+using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Adornments;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 
@@ -32,18 +35,19 @@ namespace HelloWorldCompletion
 
         private ImmutableArray<CompletionItem> sampleItemsOnEvenLine;
         private ImmutableArray<CompletionItem> sampleItemsOnOddLine;
+        static ImageElement CompletionItemIcon = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), 3533), "Unknown");
 
         public HelloWorldCompletionSource()
         {
             sampleItemsOnEvenLine = ImmutableArray.Create(
-                new CompletionItem("Hello", this),
-                new CompletionItem("World", this),
-                new CompletionItem("even", this)
+                new CompletionItem("Hello", this, CompletionItemIcon),
+                new CompletionItem("World", this, CompletionItemIcon),
+                new CompletionItem("even", this, CompletionItemIcon)
             );
             sampleItemsOnOddLine = ImmutableArray.Create(
-                new CompletionItem("Hello", this),
-                new CompletionItem("World", this),
-                new CompletionItem("odd", this)
+                new CompletionItem("Hello", this, CompletionItemIcon),
+                new CompletionItem("World", this, CompletionItemIcon),
+                new CompletionItem("odd", this, CompletionItemIcon)
             );
         }
 
@@ -71,15 +75,36 @@ namespace HelloWorldCompletion
 
         public async Task<object> GetDescriptionAsync(IAsyncCompletionSession session, CompletionItem item, CancellationToken token)
         {
+            var message = string.Empty;
             switch (item.DisplayText)
             {
                 case "even":
-                    return "Hello! We are on an even line number";
+                    message = "This IntelliSense completion is on an even line number";
+                    break;
                 case "odd":
-                    return "Hello! We are on an odd line number";
+                    message = "This IntelliSense completion is on an odd line number";
+                    break;
                 default:
-                    return "Hello! This is a sample item.";
+                    message = "This is a sample item.";
+                    break;
             }
+
+            var content = new ContainerElement(
+                ContainerElementStyle.Wrapped,
+                CompletionItemIcon,
+                new ClassifiedTextElement(
+                    new ClassifiedTextRun(PredefinedClassificationTypeNames.Keyword, "Hello! "),
+                    new ClassifiedTextRun(PredefinedClassificationTypeNames.Identifier, message)));
+
+            var contentContainer = new ContainerElement(
+                ContainerElementStyle.Stacked,
+                content,
+                new ClassifiedTextElement(
+                    new ClassifiedTextRun(
+                        PredefinedClassificationTypeNames.Identifier,
+                        "The current date and time is: " + DateTime.Now.ToString())));
+
+            return Task.FromResult(contentContainer);
         }
 
         public CompletionStartData InitializeCompletion(CompletionTrigger trigger, SnapshotPoint triggerLocation, CancellationToken token)
