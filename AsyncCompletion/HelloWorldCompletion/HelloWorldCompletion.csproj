@@ -450,6 +450,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelloWorldCompletionSourceProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HelloWorldCompletionItemSource.cs" />
   </ItemGroup>

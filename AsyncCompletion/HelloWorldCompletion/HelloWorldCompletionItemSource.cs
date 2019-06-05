@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Core.Imaging;
@@ -9,24 +8,9 @@ using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Utilities;
 
 namespace HelloWorldCompletion
 {
-    [Export(typeof(IAsyncCompletionSourceProvider))]
-    [ContentType("CSharp")]
-    [Name("Hello World completion item source")]
-    internal class HelloWorldCompletionSourceProvider : IAsyncCompletionSourceProvider
-    {
-        Lazy<HelloWorldCompletionSource> Source = new Lazy<HelloWorldCompletionSource>(() => new HelloWorldCompletionSource());
-
-        public IAsyncCompletionSource GetOrCreate(ITextView textView)
-        {
-            return Source.Value;
-        }
-    }
-
     public class HelloWorldCompletionSource : IAsyncCompletionSource
     {
         public static bool ShouldReturnItems { get; set; } = true;
@@ -49,6 +33,13 @@ namespace HelloWorldCompletion
                 new CompletionItem("World", this, CompletionItemIcon),
                 new CompletionItem("odd", this, CompletionItemIcon)
             );
+        }
+
+        public CompletionStartData InitializeCompletion(CompletionTrigger trigger, SnapshotPoint triggerLocation, CancellationToken token)
+        {
+            // Since we are plugging in to CSharp content type,
+            // allow the CSharp language service to pick the Applicable To Span.
+            return CompletionStartData.ParticipatesInCompletionIfAny;
         }
 
         public async Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
@@ -105,13 +96,6 @@ namespace HelloWorldCompletion
                         "The current date and time is: " + DateTime.Now.ToString())));
 
             return contentContainer;
-        }
-
-        public CompletionStartData InitializeCompletion(CompletionTrigger trigger, SnapshotPoint triggerLocation, CancellationToken token)
-        {
-            // Since we are plugging in to CSharp content type,
-            // allow the CSharp language service to pick the Applicable To Span.
-            return CompletionStartData.ParticipatesInCompletionIfAny;
         }
     }
 }
