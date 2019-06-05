@@ -63,7 +63,7 @@ namespace HelloWorldCompletion
             if (ShouldReturnItems)
             {
                 return new CompletionContext(
-                    triggerLocation.GetContainingLine().LineNumber % 2 == 0
+                    triggerLocation.GetContainingLine().LineNumber % 2 == 1 // arrays start at 0, so convert to human readable format
                     ? sampleItemsOnEvenLine
                     : sampleItemsOnOddLine);
             }
@@ -104,7 +104,7 @@ namespace HelloWorldCompletion
                         PredefinedClassificationTypeNames.Identifier,
                         "The current date and time is: " + DateTime.Now.ToString())));
 
-            return Task.FromResult(contentContainer);
+            return contentContainer;
         }
 
         public CompletionStartData InitializeCompletion(CompletionTrigger trigger, SnapshotPoint triggerLocation, CancellationToken token)
