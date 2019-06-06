@@ -14,10 +14,6 @@ namespace HelloWorldCompletion
 {
     public class HelloWorldCompletionSource : IAsyncCompletionSource
     {
-        public static bool ShouldReturnItems { get; set; } = true;
-        public static bool ShouldDismiss { get; set; } = false;
-        public static double Delay { get; set; } = 0;
-
         private static ImageElement CompletionItemIcon = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), 200), "Hello Icon");
         private ImmutableArray<CompletionItem> sampleItems;
 
@@ -39,22 +35,8 @@ namespace HelloWorldCompletion
 
         public async Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
         {
-            await Task.Delay(TimeSpan.FromMilliseconds(Delay));
-
-            if (ShouldDismiss)
-            {
-                session.Dismiss();
-            }
-
             session.Properties["LineNumber"] = triggerLocation.GetContainingLine().LineNumber;
-            if (ShouldReturnItems)
-            {
-                return new CompletionContext(sampleItems);
-            }
-            else
-            {
-                return CompletionContext.Empty;
-            }
+            return new CompletionContext(sampleItems);
         }
 
         public async Task<object> GetDescriptionAsync(IAsyncCompletionSession session, CompletionItem item, CancellationToken token)
