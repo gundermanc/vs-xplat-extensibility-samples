@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
+using Newtonsoft.Json.Linq;
 
 namespace HelloWorldCompletion
 {
@@ -17,22 +18,14 @@ namespace HelloWorldCompletion
         public static bool ShouldDismiss { get; set; } = false;
         public static double Delay { get; set; } = 0;
 
-        private ImmutableArray<CompletionItem> sampleItemsOnEvenLine;
-        private ImmutableArray<CompletionItem> sampleItemsOnOddLine;
-        static ImageElement CompletionItemIcon = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), 3533), "Unknown");
+        private static ImageElement CompletionItemIcon = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), 200), "Hello Icon");
+        private ImmutableArray<CompletionItem> sampleItems;
 
         public HelloWorldCompletionSource()
         {
-            sampleItemsOnEvenLine = ImmutableArray.Create(
+            sampleItems = ImmutableArray.Create(
                 new CompletionItem("Hello", this, CompletionItemIcon),
-                new CompletionItem("World", this, CompletionItemIcon),
-                new CompletionItem("even", this, CompletionItemIcon)
-            );
-            sampleItemsOnOddLine = ImmutableArray.Create(
-                new CompletionItem("Hello", this, CompletionItemIcon),
-                new CompletionItem("World", this, CompletionItemIcon),
-                new CompletionItem("odd", this, CompletionItemIcon)
-            );
+                new CompletionItem("World", this, CompletionItemIcon));
         }
 
         public CompletionStartData InitializeCompletion(CompletionTrigger trigger, SnapshotPoint triggerLocation, CancellationToken token)
@@ -40,6 +33,8 @@ namespace HelloWorldCompletion
             // Since we are plugging in to CSharp content type,
             // allow the CSharp language service to pick the Applicable To Span.
             return CompletionStartData.ParticipatesInCompletionIfAny;
+            // Alternatively, we've got to provide location for completion
+            //return new CompletionStartData(CompletionParticipation.ProvidesItems,
         }
 
         public async Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
@@ -51,12 +46,10 @@ namespace HelloWorldCompletion
                 session.Dismiss();
             }
 
+            session.Properties["LineNumber"] = triggerLocation.GetContainingLine().LineNumber;
             if (ShouldReturnItems)
             {
-                return new CompletionContext(
-                    triggerLocation.GetContainingLine().LineNumber % 2 == 1 // arrays start at 0, so convert to human readable format
-                    ? sampleItemsOnEvenLine
-                    : sampleItemsOnOddLine);
+                return new CompletionContext(sampleItems);
             }
             else
             {
@@ -66,36 +59,26 @@ namespace HelloWorldCompletion
 
         public async Task<object> GetDescriptionAsync(IAsyncCompletionSession session, CompletionItem item, CancellationToken token)
         {
-            var message = string.Empty;
-            switch (item.DisplayText)
-            {
-                case "even":
-                    message = "This IntelliSense completion is on an even line number";
-                    break;
-                case "odd":
-                    message = "This IntelliSense completion is on an odd line number";
-                    break;
-                default:
-                    message = "This is a sample item.";
-                    break;
-            }
-
             var content = new ContainerElement(
                 ContainerElementStyle.Wrapped,
                 CompletionItemIcon,
                 new ClassifiedTextElement(
-                    new ClassifiedTextRun(PredefinedClassificationTypeNames.Keyword, "Hello! "),
-                    new ClassifiedTextRun(PredefinedClassificationTypeNames.Identifier, message)));
-
-            var contentContainer = new ContainerElement(
-                ContainerElementStyle.Stacked,
-                content,
-                new ClassifiedTextElement(
+                    new ClassifiedTextRun(PredefinedClassificationTypeNames.Keyword, "Hello!"),
+                    new ClassifiedTextRun(PredefinedClassificationTypeNames.Identifier, " This is a sample item")));
+            var lineInfo = new ClassifiedTextElement(
+                    new ClassifiedTextRun(
+                        PredefinedClassificationTypeNames.Comment,
+                        "You are on line " + ((int)(session.Properties["LineNumber"]) + 1).ToString()));
+            var timeInfo = new ClassifiedTextElement(
                     new ClassifiedTextRun(
                         PredefinedClassificationTypeNames.Identifier,
-                        "The current date and time is: " + DateTime.Now.ToString())));
+                        "and it is " + DateTime.Now.ToShortTimeString()));
 
-            return contentContainer;
+            return new ContainerElement(
+                ContainerElementStyle.Stacked,
+                content,
+                lineInfo,
+                timeInfo);
         }
     }
 }
