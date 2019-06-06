@@ -8,13 +8,12 @@ using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
-using Newtonsoft.Json.Linq;
 
 namespace HelloWorldCompletion
 {
     public class HelloWorldCompletionSource : IAsyncCompletionSource
     {
-        private static ImageElement CompletionItemIcon = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), 200), "Hello Icon");
+        private static ImageElement CompletionItemIcon = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), 3335), "Hello Icon");
         private ImmutableArray<CompletionItem> sampleItems;
 
         public HelloWorldCompletionSource()
@@ -30,7 +29,7 @@ namespace HelloWorldCompletion
             // allow the CSharp language service to pick the Applicable To Span.
             return CompletionStartData.ParticipatesInCompletionIfAny;
             // Alternatively, we've got to provide location for completion
-            //return new CompletionStartData(CompletionParticipation.ProvidesItems,
+            // return new CompletionStartData(CompletionParticipation.ProvidesItems, ...
         }
 
         public async Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
