@@ -1,3 +1,7 @@
+## Deprecated
+
+This repo has been deprecated in favor of the samples in the official Open Source xPlat Editor layers at https://github.com/microsoft/vs-editor-api/tree/master/samples.
+
 # vs-xplat-extensibility-samples
 Unified extensibility samples that work on Visual Studio for Windows and Visual Studio for Mac
 
